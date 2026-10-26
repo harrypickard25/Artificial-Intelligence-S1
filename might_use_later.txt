@@ -1,0 +1,17 @@
+        # if counter==0:
+        #     buying+=[item]
+        #     counter+=1
+        # elif counter==1:
+        #     maintenance+=[item]
+        #     counter+=1
+        # elif counter==2:
+        #     doors+=[item]
+        #     counter+=1
+        # elif counter==3:
+        #     people+=[item]
+        #     counter+=1
+        # elif counter==4:
+        #     boot_size+=[item]
+        #     counter+=1
+        # elif counter==5:
+        #     safety+=[item]
