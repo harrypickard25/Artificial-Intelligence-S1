@@ -15,3 +15,4 @@
         #     counter+=1
         # elif counter==5:
         #     safety+=[item]
+# for essay do part going over each line of code, then a typical run maybe

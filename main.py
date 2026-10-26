@@ -22,17 +22,19 @@ for i in range(0,len(df)):
     # current_combination+=[1]
     # all_combinations+=[current_combination]
     for current in all_combinations:
+        file.write("on loop" + str(counter) + "all combinations is " + str(all_combinations) + "\n")
         # print(str("hello bro???"))
         current_spliced = current[:7]
         # print
-        file.write(str(current_combination) + "\n" + str(current_spliced) + "\n\n\n")
+        # file.write(str(current_combination) + "\n" + str(current_spliced) + "\n\n\n")
         if current_combination == current_spliced:
             file.write(str("anything going on here??????"))
             all_combinations[all_combinations.index(current)][7]+=1
         #   print("MULTIPLE DETECTED " + str(current_combination))
         else:
-            file.write(str("Added everything") + str(counter))
+            file.write(str("Added everything") + str(counter) + "\n")
             current_combination+=[1]
+            file.write(str(current_combination) + "\n\n")
             all_combinations+=[current_combination]
     if counter>11:
         # print(str(all_combinations))
