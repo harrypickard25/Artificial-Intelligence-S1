@@ -1,11 +1,25 @@
 import pandas as pd
-df = pd.read_csv("training_data.csv", header=None)
+df = pd.read_csv("training_data.csv", header=None, skiprows=1)
 # buying, maintenance, doors, people, boot_size, safety = [],[],[],[],[],[]
 # ID,Age,Sex,Job,Housing,Saving accounts,Checking account,Credit amount,Duration,Purpose,Risk
 pd.options.display.max_rows = 9999
-
-filters = ["48","male","2","own","little","N","N","N","N"]
+unique_items = [[],[],[],[],[],[],[],[],[]]
+filters = ["33","male","N","N","N","N","N","N","N"]
 bad_list,good_list = [],[]
+def discover_unique_items_in_row(df,line_to_check,unique_items):
+    counter=-2
+    lines_to_skip = [-1,0,6,7,9]
+    for item in df.loc[line_to_check]:
+        counter+=1
+        if counter in lines_to_skip:
+            print("AHHH\n" + str(counter) + "AHHH\n")
+            continue
+        if item not in unique_items[counter]:
+            if counter==2:
+                unique_items[counter]+=[int(item)]
+            else:
+                unique_items[counter]+=[item]
+    return unique_items
 def validate_condition(df,line_to_check,filters):
     validated = [False,False,False,False,False,False,False,False,False]
     file.write("\n\nStarted checking line " + str(line_to_check))
@@ -13,7 +27,7 @@ def validate_condition(df,line_to_check,filters):
         file.write(str(current_condition))
         if filters[current_condition] == "N":
             validated[current_condition] = True
-        elif df.loc[line_to_check][current_condition+1] == filters[current_condition]:
+        elif str(df.loc[line_to_check][current_condition+1]) == filters[current_condition]:
             validated[current_condition] = True
             file.write(str(df.loc[line_to_check][current_condition+1]) + " equalling " + str(filters[current_condition]) + " is " + str(df.loc[line_to_check][current_condition+1] == filters[current_condition]) + "  trueeeeeeee\n")
             file.write(str(current_condition) + str(validated) + "\n")  
@@ -29,7 +43,7 @@ counter = 0
 all_combinations = []
 file = open("log.txt", "a")
 for i in range(0,len(df)):
-    print(str(counter) + str(len(all_combinations)))
+    print(str(counter))
     alreadyexists = False
     current_combination = []
     counter+=1
@@ -37,10 +51,10 @@ for i in range(0,len(df)):
         file.write("YES IT EXISTS LINE " + str(counter))
         for item in df.loc[i]:
             current_combination+=[item]
-            file.write(str("Added everything") + str(counter) + "\n")
+            file.write(str("Added everything") + str(i) + "\n")
         # current_combination+=[1]
         all_combinations+=[current_combination]
-
+        unique_items = discover_unique_items_in_row(df,i,unique_items)
         if df.loc[i][10] == "bad":
             bad_list+=[current_combination]
         elif df.loc[i][10] == "good":
@@ -55,30 +69,55 @@ for i in range(0,len(df)):
 
     # current_combination+=[1]
     # all_combinations+=[current_combination] 
-    for current in all_combinations:
-        file.write("on loop" + str(counter) + "all combinations is " + str(all_combinations) + "\n")
-        current_spliced = current[:7]   
-        file.write(str(current_combination) + "\n" + str(current_spliced) + "\n\n\n")
-        if current_combination == current_spliced:
-            # file.write(str("anything going on here??????"))
-            all_combinations[all_combinations.index(current)][7]+=1
-            alreadyexists = True
-            print("MULTIPLE DETECTED " + str(current_combination))
-        # else:
-        #     # file.write(str("Added everything") + str(counter) + "\n")
-        #     current_combination+=[1]
-        #     # file.write(str(current_combination) + "\n\n")
-        #     all_combinations+=[current_combination]
+    # for current in all_combinations:
+    #     # file.write("on loop" + str(counter) + "all combinations is " + str(all_combinations) + "\n")
+    #     current_spliced = current[:7]   
+    #     file.write(str(current_combination) + "\n" + str(current_spliced) + "\n\n\n")
+    #     if current_combination == current_spliced:
+    #         # file.write(str("anything going on here??????"))
+    #         all_combinations[all_combinations.index(current)][7]+=1
+    #         alreadyexists = True
+    #         print("MULTIPLE DETECTED " + str(current_combination))
+    #     # else:
+    #     #     # file.write(str("Added everything") + str(counter) + "\n")
+    #     #     current_combination+=[1]
+    #     #     # file.write(str(current_combination) + "\n\n")
+    #     #     all_combinations+=[current_combination]
     # print(str(all_combinations))
-
+print(str(unique_items))
 # print(str(buying))
-print(str(len(all_combinations)))
-print("GOOOOD")
-for current in good_list:
-    print(str(current))
-print("BADDDD")
+# print(str(len(all_combinations)))
+increase_chances,lower_chances = [],[]
+proportions = []
 for current in bad_list:
     print(str(current))
-print("hello")
-for current in all_combinations:
+print("ahadhashdisahasiud")
+for current in good_list:
     print(str(current))
+for i in range(0,8):
+    file.write("\n\n\n\n\n" + str(i))
+    if filters[i] == "N":
+        for item in unique_items[i+1]:
+            temp_good = []
+            temp_bad = []
+            for current in good_list:
+                file.write("\n\n" + str(current[i+2]) + "\n")
+                file.write(str(item) + "\n")
+                if current[i+2] == item:
+                    temp_good+=[item]
+            for current in bad_list:
+                if str(current[i+2]) == str(item):
+                    file.write("\nADDED\n")
+                    temp_bad+=[item]
+            file.write("\nhellothisislenofbad " + str(len(temp_bad)) + "\n")
+            file.write("\nhellothisislenofgood " + str(len(temp_good)) + "\n")
+            proportion_of_bad_from_total = len(temp_bad)/(len(temp_bad)+len(temp_good))
+            proportions+=[proportion_of_bad_from_total]
+            if proportion_of_bad_from_total>0.59:
+                lower_chances+=[i]
+            elif proportion_of_bad_from_total<0.41:
+                increase_chances+=[i]
+print(str(increase_chances))
+print(str(lower_chances))
+print(str(proportions))
+# print("hello")
