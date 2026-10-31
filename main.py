@@ -4,7 +4,7 @@ df = pd.read_csv("training_data.csv", header=None, skiprows=1)
 # ID,Age,Sex,Job,Housing,Saving accounts,Checking account,Credit amount,Duration,Purpose,Risk
 pd.options.display.max_rows = 9999
 unique_items = [[],[],[],[],[],[],[],[],[]]
-filters = ["33","male","N","N","N","N","N","N","N"]
+filters = ["30","female","","N","N","N","N","N","N"]
 bad_list,good_list = [],[]
 def discover_unique_items_in_row(df,line_to_check,unique_items):
     counter=-2
@@ -41,6 +41,7 @@ def validate_condition(df,line_to_check,filters):
         return False
 counter = 0
 all_combinations = []
+average_age,average_credit,average_duration = [],[],[]
 file = open("log.txt", "a")
 for i in range(0,len(df)):
     print(str(counter))
@@ -53,6 +54,7 @@ for i in range(0,len(df)):
             current_combination+=[item]
             file.write(str("Added everything") + str(i) + "\n")
         # current_combination+=[1]
+
         all_combinations+=[current_combination]
         unique_items = discover_unique_items_in_row(df,i,unique_items)
         if df.loc[i][10] == "bad":
@@ -103,7 +105,7 @@ for i in range(0,8):
             for current in good_list:
                 file.write("\n\n" + str(current[i+2]) + "\n")
                 file.write(str(item) + "\n")
-                if current[i+2] == item:
+                if str(current[i+2]) == str(item):
                     temp_good+=[item]
             for current in bad_list:
                 if str(current[i+2]) == str(item):
@@ -121,3 +123,5 @@ print(str(increase_chances))
 print(str(lower_chances))
 print(str(proportions))
 # print("hello")
+[2, 3, 3, 4, 7, 7]
+[2, 3, 3, 4, 4, 4, 7, 7, 7]
