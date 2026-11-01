@@ -1,10 +1,10 @@
 import pandas as pd
 df = pd.read_csv("training_data.csv", header=None, skiprows=1)
 # buying, maintenance, doors, people, boot_size, safety = [],[],[],[],[],[]
-# ID,Age,Sex,Job,Housing,Saving accounts,Checking account,Credit amount,Duration,Purpose,Risk
+factors = ["Age","Sex","Job","Housing","Saving accounts","Checking account","Credit amount","Duration","Purpose","Risk"]
 pd.options.display.max_rows = 9999
 unique_items = [[],[],[],[],[],[],[],[],[]]
-filters = ["N","female","1","rent","moderate","N","N","N","N"]
+filters = ["N","N","N","N","N","N","N","N","N"]
 bad_list,good_list = [],[]
 def discover_unique_items_in_row(df,line_to_check,unique_items):
     counter=-2
@@ -112,10 +112,13 @@ for current in good_list:
     print(str(current))
 print(str(avg_data))
 for i in range(0,3):
-    print("dividing " + str(avg_data[(i*2)+1]) + " by " + str(avg_data[i*2]))
+    # print("dividing " + str(avg_data[(i*2)+1]) + " by " + str(avg_data[i*2]))
     avg_data[i] = avg_data[(i*2)+1]/avg_data[i*2]
 print("\n\n\n\n\n")
-for i in range(0,8):
+print(str(bad_list))
+print(str(good_list))
+print("\n\n\n")
+for i in range(0,9):
     file.write("\n\n\n\n\n" + str(i))
     if filters[i] == "N":
         if i==0 or i==6 or i==7:
@@ -136,9 +139,9 @@ for i in range(0,8):
             proportion_of_bad_from_total = len(temp_bad)/(len(temp_bad)+len(temp_good))
             proportions+=[proportion_of_bad_from_total]
             if proportion_of_bad_from_total>0.59:
-                lower_chances+=[str(avg_data_index) + "morethanavg"]
+                lower_chances+=[str(i),"morethanavg"]
             elif proportion_of_bad_from_total<0.41:
-                increase_chances+=[str(avg_data_index) + "morethanavg"]                
+                increase_chances+=[[str(i),"morethanavg"]]                
     
 
             temp_good = []
@@ -154,34 +157,39 @@ for i in range(0,8):
             proportion_of_bad_from_total = len(temp_bad)/(len(temp_bad)+len(temp_good))
             proportions+=[proportion_of_bad_from_total]
             if proportion_of_bad_from_total>0.59:
-                lower_chances+=[str(avg_data_index) + "lessthanavg"]
+                lower_chances+=[str(i),"lessthanavg"]
             elif proportion_of_bad_from_total<0.41:
-                increase_chances+=[str(avg_data_index) + "lessthanavg"]                
+                increase_chances+=[[str(i),"lessthanavg"]]               
         else:
-            for item in unique_items[i+1]:            
+            for item in unique_items[i]:
+                print("\n\n\n" + str(item) + "\n\n\n")
                 temp_good = []
                 temp_bad = []
                 for current in good_list:
-                    file.write("\n\n" + str(current[i+2]) + "\n")
+                    file.write("\n\n" + str(current[i+1]) + "\n")
                     file.write(str(item) + "\n")
-                    if str(current[i+2]) == str(item):
+                    if str(current[i+1]) == str(item):
                         temp_good+=[item]
                 for current in bad_list:
-                    if str(current[i+2]) == str(item):
+                    # print(str(current[i+2]))
+                    if str(current[i+1]) == str(item):
                         file.write("\nADDED\n")
                         temp_bad+=[item]
-                file.write("\nhellothisislenofbad " + str(len(temp_bad)) + "\n")
-                file.write("\nhellothisislenofgood " + str(len(temp_good)) + "\n")
+                # file.write("\nhellothisislenofbad " + str(len(temp_bad)) + "\n")
+                # file.write("\nhellothisislenofgood " + str(len(temp_good)) + "\n")
                 proportion_of_bad_from_total = len(temp_bad)/(len(temp_bad)+len(temp_good))
                 proportions+=[proportion_of_bad_from_total]
                 if proportion_of_bad_from_total>0.59:
-                    lower_chances+=[i]
+                    lower_chances+=[[i,item]]
                 elif proportion_of_bad_from_total<0.41:
-                    increase_chances+=[i]
+                    increase_chances+=[[i,item]]
 print(str(increase_chances))
 print(str(lower_chances))
-print(str(proportions))
-for current_combination in all_combinations:
-    print(str(current_combination))
+# print(str(proportions))
+# print(str(unique_items))
+# for factor in lower_chances:
+    
+# for current_combination in all_combinations:
+#     print(str(current_combination))
 # print(str(avg_data))
 # print("hello")
