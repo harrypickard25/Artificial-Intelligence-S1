@@ -1,11 +1,30 @@
 import pandas as pd
+import platform
+import os
+def clear():
+    if platform.system() == "Windows":
+        os.system("cls")
+    else:
+        os.system("clear")
 df = pd.read_csv("training_data.csv", header=None, skiprows=1)
 # buying, maintenance, doors, people, boot_size, safety = [],[],[],[],[],[]
 factors = ["Age","Sex","Job","Housing","Saving accounts","Checking account","Credit amount","Duration","Purpose","Risk"]
 pd.options.display.max_rows = 9999
 unique_items = [[],[],[],[],[],[],[],[],[]]
+items_to_pick = [[], ['male', 'female'], [1, 2, 3, 0], ['rent', 'own', 'free'], ['little', "nan", 'rich', 'quite rich', 'moderate'], ['moderate', "nan", 'little', 'rich'], [], [], ['repairs', 'education', 'car', 'furniture/equipment', 'radio/TV', 'business', 'vacation/others', 'domestic appliances']]
 filters = ["N","N","N","N","N","N","N","N","N"]
 bad_list,good_list = [],[]
+factors_chosen = False
+while not factors_chosen:
+    clear()
+    print("Main Menu")
+    print("1. Add new filter")
+    print("2. View filters")
+    print("3. Use current filters to analyse dataset")
+    try:
+        user_option = int(input(": "))
+    except:
+        input("Please type a number, enter to continue")
 def discover_unique_items_in_row(df,line_to_check,unique_items):
     counter=-2
     lines_to_skip = [-1,0,6,7,9]
@@ -139,9 +158,9 @@ for i in range(0,9):
             proportion_of_bad_from_total = len(temp_bad)/(len(temp_bad)+len(temp_good))
             proportions+=[proportion_of_bad_from_total]
             if proportion_of_bad_from_total>0.59:
-                lower_chances+=[str(i),"morethanavg"]
+                increase_chances+=[[int(i),"morethanavg"]]
             elif proportion_of_bad_from_total<0.41:
-                increase_chances+=[[str(i),"morethanavg"]]                
+                lower_chances+=[[int(i),"morethanavg"]]                
     
 
             temp_good = []
@@ -157,9 +176,9 @@ for i in range(0,9):
             proportion_of_bad_from_total = len(temp_bad)/(len(temp_bad)+len(temp_good))
             proportions+=[proportion_of_bad_from_total]
             if proportion_of_bad_from_total>0.59:
-                lower_chances+=[str(i),"lessthanavg"]
+                increase_chances+=[int(i),"lessthanavg"]
             elif proportion_of_bad_from_total<0.41:
-                increase_chances+=[[str(i),"lessthanavg"]]               
+                lower_chances+=[[int(i),"lessthanavg"]]               
         else:
             for item in unique_items[i]:
                 print("\n\n\n" + str(item) + "\n\n\n")
@@ -180,15 +199,19 @@ for i in range(0,9):
                 proportion_of_bad_from_total = len(temp_bad)/(len(temp_bad)+len(temp_good))
                 proportions+=[proportion_of_bad_from_total]
                 if proportion_of_bad_from_total>0.59:
-                    lower_chances+=[[i,item]]
-                elif proportion_of_bad_from_total<0.41:
                     increase_chances+=[[i,item]]
-print(str(increase_chances))
-print(str(lower_chances))
+                elif proportion_of_bad_from_total<0.41:
+                    lower_chances+=[[i,item]]
+# print(str(increase_chances))
+# print(str(lower_chances))
 # print(str(proportions))
-# print(str(unique_items))
+print(str(unique_items))
+# print(str("Lower chances:\n"))
 # for factor in lower_chances:
-    
+#     print(f"If someone has a value of {str(factor[1])} in the {str(factors[factor[0]])} class")
+# print(str("Increase chances:\n"))
+# for factor in increase_chances:
+#     print(f"If someone has a value of {str(factor[1])} in the {str(factors[factor[0]])} class")
 # for current_combination in all_combinations:
 #     print(str(current_combination))
 # print(str(avg_data))
