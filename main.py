@@ -1,34 +1,46 @@
+# Imports all modules used in the program,
+# pandas is used for importing and reading the csv file
+# platform is used to detect the os, which then uses os to clear the screen using the correct command
 import pandas as pd
 import platform
 import os
+# This function clears the screen using the correct command for the current user's os
 def clear():
     if platform.system() == "Windows":
         os.system("cls")
     else:
         os.system("clear")
+# loads the csv file into the 'df' variable
 df = pd.read_csv("training_data.csv", header=None, skiprows=1)
-# buying, maintenance, doors, people, boot_size, safety = [],[],[],[],[],[]
+# defines all the factors (column headers) for use later
 factors = ["Age","Sex","Number of jobs","Housing","How much money in their saving account","How much money in their checking account","Credit amount","Duration(months)","Purpose"]
+# making sure that every row from the dataset is loaded
 pd.options.display.max_rows = 9999
+# initialises a few of the lists which are used throughout the program, such as where all the unique items in each factor are stored
 unique_items = [[],[],[],[],[],[],[],[],[]]
 items_to_pick = [["range"], ['male', 'female'], [1, 2, 3, 0], ['free', 'rent', 'own'], ['nan', 'little', 'moderate', 'rich', 'quite rich'], ['nan', "little", 'moderate', 'rich'], ["range"], ["range"], ['repairs', 'education', 'car', 'furniture/equipment', 'radio/TV', 'business', 'vacation/others', 'domestic appliances']]
 filters = ["N","N","N","N","N","N","N","N","N"]
 bad_list,good_list = [],[]
-factors_chosen = False
-while not factors_chosen:
+# the user menu repeats while the user hasn't chosen their
+filters_chosen = False
+while not filters_chosen:
     clear()
     print("Main Menu")
     print("1. Add new filter")
     print("2. View filters")
     print("3. Use current filters to analyse dataset")
+    # attempts to cast the input to an integer, if it doesn't work then the user has typed in something other than a
+    # number, so they're then put back to the main menu again
     try:
         user_option = int(input(": "))
     except:
         input("Please type a number, enter to continue")
         continue
     if user_option == 1:
+
         print("Type the number of the factor you would like to add:\n")
         counter = 0
+        # iterates through all the factors and prints the name of all of them, to allow the user to choose one to add
         for item in factors:
             counter+=1
             print(f"{str(counter)}. {str(item)}")
@@ -40,10 +52,12 @@ while not factors_chosen:
             except:
                 input("Please type a number, enter to continue")
         current_options = items_to_pick[user_option]
+        # if the filter chosen was one that had a range of numbers, then this part is executed
         if current_options[0] == "range":
             print(f"What value would you like the '{str(factors[user_option]).lower()}' to be higher than?")
             temp_filter_value = input(": ")
         else:
+            # otherwise, this part which displays each unique item
             print(f"Type the number of the value you would like to use in the '{str(factors[user_option]).lower()}' filter:\n")
             counter = 0
             for item in current_options:
@@ -58,7 +72,7 @@ while not factors_chosen:
         print(str(filters))
         input("Enter to continue")
     elif user_option == 3:
-        factors_chosen = True
+        filters_chosen = True
 def discover_unique_items_in_row(df,line_to_check,unique_items):
     counter=-2
     lines_to_skip = [-1,0,6,7,9]
@@ -128,7 +142,6 @@ for i in range(0,len(df)):
             avg_data[4]+=1
         except:
             a=1
-        all_combinations+=[current_combination]
         unique_items = discover_unique_items_in_row(df,i,unique_items)
         if df.loc[i][10] == "bad":
             bad_list+=[current_combination]
@@ -144,26 +157,6 @@ for i in range(0,len(df)):
 if len(good_list) == 0 and len(bad_list) == 0:
     print("No data found with specified filters, please try again with different/less filters")
     quit()
-    # current_combination+=[1]
-    # all_combinations+=[current_combination] 
-    # for current in all_combinations:
-    #     # file.write("on loop" + str(counter) + "all combinations is " + str(all_combinations) + "\n")
-    #     current_spliced = current[:7]   
-    #     file.write(str(current_combination) + "\n" + str(current_spliced) + "\n\n\n")
-    #     if current_combination == current_spliced:
-    #         # file.write(str("anything going on here??????"))
-    #         all_combinations[all_combinations.index(current)][7]+=1
-    #         alreadyexists = True
-    #         print("MULTIPLE DETECTED " + str(current_combination))
-    #     # else:
-    #     #     # file.write(str("Added everything") + str(counter) + "\n")
-    #     #     current_combination+=[1]
-    #     #     # file.write(str(current_combination) + "\n\n")
-    #     #     all_combinations+=[current_combination]
-    # print(str(all_combinations))
-# print(str(unique_items))
-# print(str(buying))
-# print(str(len(all_combinations)))
 increase_chances,lower_chances = [],[]
 proportions = []
 # for current in bad_list:
