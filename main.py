@@ -259,5 +259,7 @@ for factor in lowerChances:
         if int(factor[0]) == characteristic[0]:
             increaseChancesResultsAchieved+=1
 print("\n\nPerformance metrics:\n")
-print(f"{str((len(lowerChancesExpectedResults)/lowerChancesResultsAchieved)*100)[:4]}% of expected results to be discovered to decrease chances were discovered")
-print(f"{str((len(increaseChancesExpectedResults)/increaseChancesResultsAchieved)*100)[:4]}% of expected results to be discovered to increase chances were discovered")
+print(str(len(lowerChancesExpectedResults)))
+print(str(lowerChancesResultsAchieved))
+print(f"{str(lowerChancesResultsAchieved/len(lowerChancesExpectedResults)*100)[:4]}% of expected results to be discovered to decrease chances were discovered")
+print(f"{str((increaseChancesResultsAchieved/len(increaseChancesExpectedResults))*100)[:4]}% of expected results to be discovered to increase chances were discovered")
