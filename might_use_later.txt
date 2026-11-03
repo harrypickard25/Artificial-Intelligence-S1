@@ -21,11 +21,11 @@
 # maybe come up with suggestions on where to cut features?
 # Family car (medium buying price, low maintenance, more than 4 people) make sure safety, boot space and doors is high
 # most expensive cars (high buying price, big boot size) anything about why people wouldnt want to buy them
-# change all variables to camelCase
-add nan option
+ change all variables to camelCase
+ add nan option
  add clear function more
  call the bad and good lists higher_chance_characteristic or something like that
  change factors list to characteristics
-delete all unnecessary comments
-make all log file writing lines make sense/delete unnecessary ones
+ delete all unnecessary comments
+ make all log file writing lines make sense/delete unnecessary ones
 # make requirements.txt
