@@ -99,7 +99,7 @@ def discover_unique_items_in_row(df,lineToCheck,uniqueItems):
 # This function checks each characteristic against each filter's value
 def validate_condition(df,lineToCheck,filters):
     validated = [False,False,False,False,False,False,False,False,False]
-    file.write("\n\nStarted checking line " + str(lineToCheck))
+    log_file.write("\n\nStarted checking line " + str(lineToCheck))
     for currentCondition in range(0,9):
         if filters[currentCondition] == "N":
             validated[currentCondition] = True
@@ -107,17 +107,17 @@ def validate_condition(df,lineToCheck,filters):
         if itemsToPick[currentCondition][0] == "range":
             if int(df.loc[lineToCheck][currentCondition+1]) > int(filters[currentCondition]):
                 validated[currentCondition] = True
-                file.write(str(df.loc[lineToCheck][currentCondition+1]) + " equalling " + str(filters[currentCondition]) + " is " + str(df.loc[lineToCheck][currentCondition+1] == filters[currentCondition]) + "  trueeeeeeee\n")
-                file.write(str(currentCondition) + str(validated) + "\n")  
+                log_file.write(str(df.loc[lineToCheck][currentCondition+1]) + " equalling " + str(filters[currentCondition]) + " is " + str(df.loc[lineToCheck][currentCondition+1] == filters[currentCondition]) + "  trueeeeeeee\n")
+                log_file.write(str(currentCondition) + str(validated) + "\n")  
         else:
             if str(df.loc[lineToCheck][currentCondition+1]) == filters[currentCondition]:
                 validated[currentCondition] = True
-                file.write(str(df.loc[lineToCheck][currentCondition+1]) + " equalling " + str(filters[currentCondition]) + " is " + str(df.loc[lineToCheck][currentCondition+1] == filters[currentCondition]) + "  trueeeeeeee\n")
-                file.write(str(currentCondition) + str(validated) + "\n")  
+                log_file.write(str(df.loc[lineToCheck][currentCondition+1]) + " equalling " + str(filters[currentCondition]) + " is " + str(df.loc[lineToCheck][currentCondition+1] == filters[currentCondition]) + "  trueeeeeeee\n")
+                log_file.write(str(currentCondition) + str(validated) + "\n")  
             else:
-                file.write(str(df.loc[lineToCheck][currentCondition+1]) + " equalling " + str(filters[currentCondition]) + " is " + str(df.loc[lineToCheck][currentCondition+1] == filters[currentCondition]) + "  falseeeeeee\n")
+                log_file.write(str(df.loc[lineToCheck][currentCondition+1]) + " equalling " + str(filters[currentCondition]) + " is " + str(df.loc[lineToCheck][currentCondition+1] == filters[currentCondition]) + "  falseeeeeee\n")
                 validated[currentCondition] =  False
-    file.write("\n" + str(validated) + "\n")
+    log_file.write("\n" + str(validated) + "\n")
     if False not in validated:
         return True
     else:
@@ -125,7 +125,7 @@ def validate_condition(df,lineToCheck,filters):
 counter = 0
 allCombinations = []
 avgData = [0,0,0,0,0,0]
-file = open("log.txt", "a")
+log_file = open("log.txt", "a")
 # Iterates through every line in the dataset
 for i in range(0,len(df)):
     alreadyExists = False
@@ -133,7 +133,7 @@ for i in range(0,len(df)):
     counter+=1
     # validates each line
     if validate_condition(df,i,filters):
-        file.write("line has been validated " + str(counter))
+        log_file.write("line has been validated " + str(counter))
         for item in df.loc[i]:
             currentCombination+=[item]
         # adds each characteristic which has a range of numbers to the avg_data list,
@@ -160,9 +160,9 @@ for i in range(0,len(df)):
         elif df.loc[i][10] == "good":
             goodList+=[currentCombination]
     else:
-        file.write("\nline " + str(counter) +  " wasn't validated, with combination " + str(currentCombination) + "\n")
+        log_file.write("\nline " + str(counter) +  " wasn't validated, with combination " + str(currentCombination) + "\n")
         continue
-    file.write("on line " + str(counter) + " combination " + str(currentCombination) + "\n has worked\n\n")
+    log_file.write("on line " + str(counter) + " combination " + str(currentCombination) + "\n has worked\n\n")
     current = []
 # makes sure that any lines actually match the current filters before continuing
 if len(goodList) == 0 and len(badList) == 0:
@@ -176,7 +176,7 @@ for i in range(0,3):
 # This section works out which values for each characteristic increase or decrease the chances of
 # paying back the loan
 for i in range(0,9):
-    file.write("\n\n\n\n\n" + str(i))
+    log_file.write("\n\n\n\n\n" + str(i))
     if filters[i] == "N":
         # for the 3 characteristics which have a large range of values, uses the average value
         # to check if a value is more or less than the average,
@@ -223,16 +223,16 @@ for i in range(0,9):
                 tempGood = []
                 tempBad = []
                 for current in goodList:
-                    file.write("\n\n" + str(current[i+1]) + "\n")
-                    file.write(str(item) + "\n")
+                    log_file.write("\n\n" + str(current[i+1]) + "\n")
+                    log_file.write(str(item) + "\n")
                     if str(current[i+1]) == str(item):
                         tempGood+=[item]
                 for current in badList:
                     if str(current[i+1]) == str(item):
-                        file.write("\added\n")
+                        log_file.write("\added\n")
                         tempBad+=[item]
-                file.write("\ncurrentlengthofbad " + str(len(tempBad)) + "\n")
-                file.write("\ncurrentlengthofgood " + str(len(tempGood)) + "\n")
+                log_file.write("\ncurrentlengthofbad " + str(len(tempBad)) + "\n")
+                log_file.write("\ncurrentlengthofgood " + str(len(tempGood)) + "\n")
                 proportionOfBadFromTotal = len(tempBad)/(len(tempBad)+len(tempGood))
                 proportions+=[proportionOfBadFromTotal]
                 if proportionOfBadFromTotal>0.59:
