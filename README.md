@@ -1,0 +1,2 @@
+Install the package in requirements.txt, by typing pip -r requirements.txt
+Then just run the program, making sure you're in the same directory as the python file, as the program expects the dataset csv file to be in the current working directory
