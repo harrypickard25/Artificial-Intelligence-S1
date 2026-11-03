@@ -241,9 +241,23 @@ for i in range(0,9):
                     lowerChances+=[[i,item]]
 # Displays all of the characteristics which increase or decrease the risk
 clear()
+# mire likely to pay back
+lowerChancesResultsAchieved, increaseChancesResultsAchieved = 0,0
+lowerChancesExpectedResults = [[0,"more than average"],[2,3],[3,"own"], [4,"rich"], [5,"rich"], [8,"radio/tv"]]
+increaseChancesExpectedResults = [[0,"less than average"],[2,0],[3,"rent"], [4,"little"], [5,"little"], [8,"car"]]
 print(str("Lower chances:\n"))
 for factor in lowerChances:
     print(f"If someone has a value of {str(factor[1])} in the {str(characteristics[factor[0]])} class")
 print(str("Increase chances:\n"))
 for factor in increaseChances:
     print(f"If someone has a value of {str(factor[1])} in the {str(characteristics[factor[0]])} class")
+for factor in lowerChances:
+    for characteristic in lowerChancesExpectedResults:
+        if int(factor[0]) == characteristic[0]:
+            lowerChancesResultsAchieved+=1
+    for characteristic in increaseChancesExpectedResults:
+        if int(factor[0]) == characteristic[0]:
+            increaseChancesResultsAchieved+=1
+print("\n\nPerformance metrics:\n")
+print(f"{str((len(lowerChancesExpectedResults)/lowerChancesResultsAchieved)*100)[:4]}% of expected results to be discovered to decrease chances were discovered")
+print(f"{str((len(increaseChancesExpectedResults)/increaseChancesResultsAchieved)*100)[:4]}% of expected results to be discovered to increase chances were discovered")
