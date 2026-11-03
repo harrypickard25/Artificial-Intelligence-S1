@@ -100,7 +100,7 @@ def discover_unique_items_in_row(df,lineToCheck,uniqueItems):
 def validate_condition(df,lineToCheck,filters):
     validated = [False,False,False,False,False,False,False,False,False]
     file.write("\n\nStarted checking line " + str(lineToCheck))
-    for current_condition in range(0,9):
+    for currentCondition in range(0,9):
         if filters[currentCondition] == "N":
             validated[currentCondition] = True
             continue
@@ -132,7 +132,7 @@ for i in range(0,len(df)):
     currentCombination = []
     counter+=1
     # validates each line
-    if validateCondition(df,i,filters):
+    if validate_condition(df,i,filters):
         file.write("line has been validated " + str(counter))
         for item in df.loc[i]:
             currentCombination+=[item]
@@ -194,12 +194,12 @@ for i in range(0,9):
             for current in badList:
                 if current[i+1]>avgData[avgDataIndex]:
                     tempBad+=[item]
-            proportionOfBadFrom_Total = len(tempBad)/(len(tempBad)+len(tempGood))
+            proportionOfBadFromTotal = len(tempBad)/(len(tempBad)+len(tempGood))
             proportions+=[proportionOfBadFromTotal]
             if proportionOfBadFromTotal>0.59:
-                increaseChances+=[[int(i),"morethanavg"]]
+                increaseChances+=[[int(i),"more than average"]]
             elif proportionOfBadFromTotal<0.41:
-                lowerChances+=[[int(i),"morethanavg"]]                
+                lowerChances+=[[int(i),"more than average"]]                
     
         # repeat of the section above, but checking if each value is less than average rather than more
             tempGood = []
@@ -213,9 +213,9 @@ for i in range(0,9):
             proportionOfBadFromTotal = len(tempBad)/(len(tempBad)+len(tempGood))
             proportions+=[proportionOfBadFromTotal]
             if proportionOfBadFromTotal>0.59:
-                increaseChances+=[[int(i),"lessthanavg"]]
+                increaseChances+=[[int(i),"less than average"]]
             elif proportionOfBadFromTotal<0.41:
-                lowerChances+=[[int(i),"lessthanavg"]]               
+                lowerChances+=[[int(i),"less than average"]]
         else:
             # adding each value to the increase or lower chances lists, just depending on if
             # 60% or more of one value per characteristic has a good or bad risk
